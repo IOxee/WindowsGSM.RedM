@@ -23,4 +23,4 @@ Just download the server, database and scripts are added manually
 
 
 # License
-This project is licensed under the MIT License - see the <a href="https://github.com/dkdue/WindowsGSM.RedM/blob/main/LICENSE">LICENSE.md</a> file for details
+This project is licensed under the MIT License - see the <a href="https://github.com/IOxee/WindowsGSM.RedM/blob/main/LICENSE">LICENSE.md</a> file for details
