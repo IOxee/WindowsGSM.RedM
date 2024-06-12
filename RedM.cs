@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -21,7 +21,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.RedM", // WindowsGSM.XXXX
             author = "ByBlackDeath",
             description = "WindowsGSM plugin for supporting Red Dead Redemption 2 Dedicated Server",
-            version = "1.0",
+            version = "1.0.1",
             url = "https://github.com/IOxee/WindowsGSM.RedM", // Github repository link (Best practice)
             color = "#fa010c" // Color Hex
         };
@@ -72,28 +72,29 @@ namespace WindowsGSM.Plugins
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public async void CreateServerCFG()
+        public async void CreateServerCFG() {}
+
+        public async Task<string> GetCacheDirectory()
         {
-            //Download server.cfg
-            string configPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, @"cfx-server-data-master\server.cfg");
-            if (await Functions.Github.DownloadGameServerConfig(configPath, FullName))
+            string serverDataPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID);
+            string[] directories = Directory.GetDirectories(serverDataPath);
+            foreach (string directory in directories)
             {
-                string configText = File.ReadAllText(configPath);
-                configText = configText.Replace("{{hostname}}", _serverData.ServerName);
-                configText = configText.Replace("{{rcon_password}}", _serverData.GetRCONPassword());
-                configText = configText.Replace("{{ip}}", _serverData.GetIPAddress());
-                configText = configText.Replace("{{port}}", _serverData.ServerPort);
-                configText = configText.Replace("{{maxplayers}}", Maxplayers);
-                File.WriteAllText(configPath, configText);
+                if (Directory.Exists(Path.Combine(directory, "cache")))
+                {
+                    return Path.Combine(directory, "cache");
+                }
             }
-
-            //Download sample logo
-            string logoPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, @"cfx-server-data-master\myLogo.png");
-            await Functions.Github.DownloadGameServerConfig(logoPath, FullName);
+            return null;
         }
-
+        
         public async Task<Process> Start()
         {
+            string cachePath = await GetCacheDirectory();
+            if (cachePath != null) 
+                if (Directory.Exists(cachePath))
+                    Directory.Delete(cachePath, true);
+
             string fxServerPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, @"server\FXServer.exe");
             if (!File.Exists(fxServerPath))
             {
@@ -108,17 +109,11 @@ namespace WindowsGSM.Plugins
                 return null;
             }
 
-            string serverDataPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, "cfx-server-data-master");
+            string serverDataPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID);
             if (!Directory.Exists(serverDataPath))
             {
-                Error = $"Directory cfx-server-data-master not found ({serverDataPath})";
+                Error = $"Directory not found ({serverDataPath})";
                 return null;
-            }
-
-            string configPath = Path.Combine(serverDataPath, "server.cfg");
-            if (!File.Exists(configPath))
-            {
-                Notice = $"server.cfg not found ({configPath})";
             }
 
             Process p;
@@ -237,15 +232,12 @@ namespace WindowsGSM.Plugins
                     //Create FiveM-version.txt and write the downloaded version with hash
                     File.WriteAllText(Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, "RedM-version.txt"), recommended);
 
-                    //Download cfx-server-data-master and extract to folder cfx-server-data-master then delete cfx-server-data-master.zip
-                    zipPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, "cfx-server-data-master.zip");
-                    await webClient.DownloadFileTaskAsync("https://github.com/citizenfx/cfx-server-data/archive/master.zip", zipPath);
-                    await Task.Run(() => FileManagement.ExtractZip(zipPath, Functions.ServerPath.GetServersServerFiles(_serverData.ServerID)));
-                    await Task.Run(() => File.Delete(zipPath));
+                    // zipPath = Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, "cfx-server-data-master.zip");
+                    // await webClient.DownloadFileTaskAsync("https://github.com/citizenfx/cfx-server-data/archive/master.zip", zipPath);
+                    // await Task.Run(() => FileManagement.ExtractZip(zipPath, Functions.ServerPath.GetServersServerFiles(_serverData.ServerID)));
+                    // await Task.Run(() => File.Delete(zipPath));
 
-                    //File.WriteAllText(Path.Combine("servers", "installLog.txt"), log);
-
-                    Additional += $"+set txAdminPort {GetTxAdminPort(int.Parse(_serverData.ServerID))} +set txDataPath \"{Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, "cfx-server-data-master")}\"";
+                    Additional += $"+set txAdminPort {GetTxAdminPort(int.Parse(_serverData.ServerID))} +set txDataPath \"{Functions.ServerPath.GetServersServerFiles(_serverData.ServerID)}\"";
                 }
 
                 return null;
