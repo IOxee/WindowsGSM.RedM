@@ -12,8 +12,9 @@ Just download the server, database and scripts are added manually
 
 # Installation
   1. Download the latest release
-  2. Move RedM.cs folder to plugins folder
-  3. Click [RELOAD PLUGINS] button or restart WindowsGSM
+  2. Rename the folder to RedM.cs
+  3. Move RedM.cs folder to plugins folder
+  4. Click [RELOAD PLUGINS] button or restart WindowsGSM
   
 # Guide
 <a href="https://forum.cfx.re/t/how-to-setup-a-redm-server/918850">
