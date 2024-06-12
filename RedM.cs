@@ -47,7 +47,7 @@ namespace WindowsGSM.Plugins
         public REDM(ServerConfig serverData)
         {
             _serverData = serverData;
-            Additional = $"+set serverProfile \"{GenerateShortUUID()}\" +set txAdminVerbose true"; // I DO NOT ADD ANYTHING HERE OR DELETE THIS LINE
+            Additional = $"+set serverProfile \"{GenerateShortUUID()}\" +set txAdminVerbose true "; // I DO NOT ADD ANYTHING HERE OR DELETE THIS LINE
         }
         private readonly ServerConfig _serverData;
         public string Error, Notice;
