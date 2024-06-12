@@ -8,7 +8,7 @@ https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/
 Just download the server, database and scripts are added manually
 
 # Requirements
-WindowsGSM >= v1.22.0
+[WindowsGSM](https://github.com/WindowsGSM/WindowsGSM) >= v1.23.1
 
 # Installation
   1. Download the latest release
