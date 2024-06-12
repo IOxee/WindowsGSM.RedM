@@ -4,7 +4,8 @@
 # The Game
 https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/
 
-# Important announcement!!! Just download the server, database and scripts are added manually
+# Important announcement!
+Just download the server, database and scripts are added manually
 
 # Requirements
 WindowsGSM >= v1.22.0
