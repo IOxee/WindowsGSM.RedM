@@ -21,7 +21,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.RedM", // WindowsGSM.XXXX
             author = "ByBlackDeath",
             description = "WindowsGSM plugin for supporting Red Dead Redemption 2 Dedicated Server",
-            version = "1.0.1",
+            version = "1.0.2",
             url = "https://github.com/IOxee/WindowsGSM.RedM", // Github repository link (Best practice)
             color = "#fa010c" // Color Hex
         };
